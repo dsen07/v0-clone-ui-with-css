@@ -118,3 +118,121 @@
     </div>
   </div>
 </div>
+
+
+<div *ngIf="isOpen" class="log-modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="log-modal-container">
+    <div class="log-modal">
+      <div class="log-modal-header">
+        <h1 class="log-modal-title">Log Details</h1>
+        <div class="log-summary">
+          <span class="log-summary-timestamp">{{ log.timestamp }}</span>
+          <span class="log-summary-method">{{ log.method }}</span>
+          <span class="log-summary-endpoint">{{ log.endpoint }}</span>
+          <span class="log-summary-status">{{ log.status }}</span>
+          <span class="log-summary-duration">{{ log.duration }}ms</span>
+        </div>
+      </div>
+      
+      <div class="divider"></div>
+      
+      <div class="log-modal-content">
+        <div class="parent-log-actions">
+          <h2 class="section-title">Parent Log Data</h2>
+          <div class="action-buttons">
+            <button class="action-button" (click)="viewRequest(log)">
+              <span class="action-indicator indicator-request"></span>
+              View Request
+            </button>
+            <button class="action-button" (click)="viewResponse(log)">
+              <span class="action-indicator indicator-response"></span>
+              View Response
+            </button>
+          </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="child-operations-section">
+          <h2 class="section-title">Child Operations ({{ totalChildren }} total)</h2>
+          
+          <table class="child-operations-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Timestamp</th>
+                <th>Endpoint</th>
+                <th>Method</th>
+                <th>Status</th>
+                <th>Duration</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let child of log.children">
+                <!-- Parent child row -->
+                <tr>
+                  <td class="status-icon" [ngClass]="getStatusIconClass(child.status, child.endpoint)">
+                    {{ getStatusIcon(child.status, child.endpoint) }}
+                  </td>
+                  <td class="child-timestamp">{{ child.timestamp }}</td>
+                  <td class="child-endpoint">
+                    {{ child.endpoint }}
+                    <span *ngIf="child.children && child.children.length > 0" class="child-count">
+                      +{{ countAllChildren(child) }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="child-method" [ngClass]="getMethodClass(child.method)">
+                      {{ child.method }}
+                    </span>
+                  </td>
+                  <td class="child-status">{{ child.status }}</td>
+                  <td class="child-duration">{{ child.duration }}ms</td>
+                  <td class="child-actions">
+                    <button class="child-action-button" (click)="viewRequest(child)">
+                      <span class="child-action-indicator indicator-request"></span>
+                      View Request
+                    </button>
+                    <button class="child-action-button" (click)="viewResponse(child)">
+                      <span class="child-action-indicator indicator-response"></span>
+                      View Response
+                    </button>
+                  </td>
+                </tr>
+                
+                <!-- Nested children -->
+                <ng-container *ngIf="child.expanded && child.children">
+                  <tr *ngFor="let nestedChild of child.children" class="nested-row">
+                    <td class="status-icon" [ngClass]="getStatusIconClass(nestedChild.status, nestedChild.endpoint)">
+                      {{ getStatusIcon(nestedChild.status, nestedChild.endpoint) }}
+                    </td>
+                    <td class="child-timestamp">{{ nestedChild.timestamp }}</td>
+                    <td class="child-endpoint">{{ nestedChild.endpoint }}</td>
+                    <td>
+                      <span class="child-method" [ngClass]="getMethodClass(nestedChild.method)">
+                        {{ nestedChild.method }}
+                      </span>
+                    </td>
+                    <td class="child-status">{{ nestedChild.status }}</td>
+                    <td class="child-duration">{{ nestedChild.duration }}ms</td>
+                    <td class="child-actions">
+                      <button class="child-action-button" (click)="viewRequest(nestedChild)">
+                        <span class="child-action-indicator indicator-request"></span>
+                        View Request
+                      </button>
+                      <button class="child-action-button" (click)="viewResponse(nestedChild)">
+                        <span class="child-action-indicator indicator-response"></span>
+                        View Response
+                      </button>
+                    </td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
