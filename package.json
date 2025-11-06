@@ -1,0 +1,44 @@
+{
+  "name": "angular-log-viewer",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "ng build",
+    "ng": "ng",
+    "serve": "ng serve",
+    "start": "ng serve",
+    "watch": "ng build --watch --configuration development"
+  },
+  "dependencies": {
+    "@angular/animations": "^20.3.10",
+    "@angular/common": "latest",
+    "@angular/compiler": "^20.3.10",
+    "@angular/core": "latest",
+    "@angular/forms": "^20.3.10",
+    "@angular/platform-browser": "latest",
+    "@angular/platform-browser-dynamic": "latest",
+    "@angular/router": "^20.3.10",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.454.0",
+    "next": "16.0.1",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "rxjs": "latest",
+    "tailwind-merge": "^2.5.5",
+    "tailwindcss-animate": "^1.0.7",
+    "tslib": "^2.8.1",
+    "zone.js": "^0.15.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^20.3.9",
+    "@angular/cli": "^20.3.9",
+    "@angular/compiler-cli": "^20.3.10",
+    "@types/node": "^22",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "postcss": "^8.5",
+    "tailwindcss": "4.1.16",
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,120 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title">{{ isChild ? 'Child Operation' : 'Request Log' }} Details</h2>
+        <p class="modal-subtitle">{{ log.endpoint }}</p>
+      </div>
+      <button class="modal-close" (click)="onClose()">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-tabs">
+      <button 
+        class="modal-tab"
+        [class.modal-tab-active]="activeTab === 'overview'"
+        (click)="setActiveTab('overview')"
+      >
+        Overview
+      </button>
+      <button 
+        class="modal-tab"
+        [class.modal-tab-active]="activeTab === 'request'"
+        (click)="setActiveTab('request')"
+      >
+        Request
+      </button>
+      <button 
+        class="modal-tab"
+        [class.modal-tab-active]="activeTab === 'response'"
+        (click)="setActiveTab('response')"
+      >
+        Response
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div *ngIf="activeTab === 'overview'" class="tab-content">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">ID</span>
+            <span class="info-value">{{ log.id }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Endpoint</span>
+            <span class="info-value info-value-code">{{ log.endpoint }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Method</span>
+            <span class="method-badge" [ngClass]="getMethodClass(log.method)">
+              {{ log.method }}
+            </span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Status</span>
+            <span class="status-badge" [ngClass]="getStatusClass(log.status)">
+              {{ log.status }}
+            </span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Timestamp</span>
+            <span class="info-value">{{ log.timestamp }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Duration</span>
+            <span class="info-value">{{ log.duration }}ms</span>
+          </div>
+        </div>
+
+        <div *ngIf="log.headers" class="section">
+          <h3 class="section-title">Headers</h3>
+          <div class="key-value-list">
+            <div *ngFor="let key of getObjectKeys(log.headers)" class="key-value-item">
+              <span class="key">{{ key }}:</span>
+              <span class="value">{{ log.headers![key] }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="log.queryParams" class="section">
+          <h3 class="section-title">Query Parameters</h3>
+          <div class="key-value-list">
+            <div *ngFor="let key of getObjectKeys(log.queryParams)" class="key-value-item">
+              <span class="key">{{ key }}:</span>
+              <span class="value">{{ log.queryParams![key] }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="activeTab === 'request'" class="tab-content">
+        <div class="json-section">
+          <div class="json-header">
+            <h3 class="section-title">Request Body</h3>
+            <button *ngIf="log.request" class="view-json-btn" (click)="viewRequestJson()">
+              View Full JSON
+            </button>
+          </div>
+          <app-json-viewer *ngIf="log.request" [data]="log.request"></app-json-viewer>
+          <p *ngIf="!log.request" class="empty-message">No request body</p>
+        </div>
+      </div>
+
+      <div *ngIf="activeTab === 'response'" class="tab-content">
+        <div class="json-section">
+          <div class="json-header">
+            <h3 class="section-title">Response Body</h3>
+            <button *ngIf="log.response" class="view-json-btn" (click)="viewResponseJson()">
+              View Full JSON
+            </button>
+          </div>
+          <app-json-viewer *ngIf="log.response" [data]="log.response"></app-json-viewer>
+          <p *ngIf="!log.response" class="empty-message">No response body</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

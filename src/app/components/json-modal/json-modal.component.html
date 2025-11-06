@@ -1,0 +1,25 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">{{ title }}</h2>
+      <div class="modal-actions">
+        <button class="copy-btn" (click)="copyToClipboard()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M5.5 4.5V3.5C5.5 2.94772 5.94772 2.5 6.5 2.5H12.5C13.0523 2.5 13.5 2.94772 13.5 3.5V9.5C13.5 10.0523 13.0523 10.5 12.5 10.5H11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <rect x="2.5" y="5.5" width="7" height="8" rx="1" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          Copy
+        </button>
+        <button class="modal-close" (click)="onClose()">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <app-json-viewer [data]="data"></app-json-viewer>
+    </div>
+  </div>
+</div>

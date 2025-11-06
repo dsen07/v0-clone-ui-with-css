@@ -1,0 +1,243 @@
+.signin-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #fafafa;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", sans-serif;
+}
+
+.signin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  color: #000;
+}
+
+.signup-button {
+  background: transparent;
+  border: 1px solid #e5e5e5;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.signup-button:hover {
+  background-color: #f5f5f5;
+  border-color: #d4d4d4;
+}
+
+.signin-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.signin-card {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-circle {
+  width: 100px;
+  height: 100px;
+  background-color: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.signin-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: #000;
+  text-align: center;
+}
+
+.signin-subtitle {
+  font-size: 0.9375rem;
+  color: #666;
+  margin: 0 0 2rem 0;
+  text-align: center;
+}
+
+.signin-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.email-input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 1px solid #d4d4d4;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.email-input:focus {
+  border-color: #000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.email-input::placeholder {
+  color: #999;
+}
+
+.primary-button {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.primary-button:hover {
+  background-color: #1a1a1a;
+}
+
+.primary-button:active {
+  transform: scale(0.98);
+}
+
+.divider-container {
+  width: 100%;
+  margin: 1.5rem 0;
+  position: relative;
+}
+
+.divider-line {
+  width: 100%;
+  height: 1px;
+  background-color: #e5e5e5;
+}
+
+.oauth-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.oauth-button {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.oauth-button:hover {
+  background-color: #fafafa;
+  border-color: #d4d4d4;
+}
+
+.oauth-button:active {
+  transform: scale(0.98);
+}
+
+.show-more {
+  background: transparent;
+  border: none;
+  color: #000;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s ease;
+}
+
+.show-more:hover {
+  color: #666;
+}
+
+.signup-link {
+  font-size: 0.9375rem;
+  color: #666;
+  text-align: center;
+  margin: 0;
+}
+
+.signup-link a {
+  color: #0070f3;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+.signin-footer {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.signin-footer a {
+  color: #999;
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.2s ease;
+}
+
+.signin-footer a:hover {
+  color: #666;
+}
+
+@media (max-width: 640px) {
+  .signin-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .signin-main {
+    padding: 1rem;
+  }
+
+  .signin-title {
+    font-size: 1.75rem;
+  }
+
+  .signin-footer {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+  }
+}

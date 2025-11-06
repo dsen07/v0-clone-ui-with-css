@@ -1,0 +1,30 @@
+.json-viewer {
+  border-radius: 6px;
+  background-color: rgba(128, 128, 128, 0.05);
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.json-pre {
+  padding: 16px;
+  overflow-x: auto;
+  margin: 0;
+}
+
+.json-code {
+  font-size: 12px;
+  font-family: "Courier New", Courier, monospace;
+  color: #1f2937;
+  line-height: 1.5;
+}
+
+@media (prefers-color-scheme: dark) {
+  .json-viewer {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: #374151;
+  }
+
+  .json-code {
+    color: #f3f4f6;
+  }
+}

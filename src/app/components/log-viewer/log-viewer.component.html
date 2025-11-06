@@ -1,0 +1,152 @@
+<div class="log-viewer">
+  <div class="log-header">
+    <h1 class="log-title">Request Logs</h1>
+    <p class="log-subtitle">Monitor and investigate API request/response logs</p>
+  </div>
+
+  <div class="search-container">
+    <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M7 12C9.76142 12 12 9.76142 12 7C12 4.23858 9.76142 2 7 2C4.23858 2 2 4.23858 2 7C2 9.76142 4.23858 12 7 12Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M14 14L10.5 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Search by ID, endpoint, method, or status..."
+      [value]="searchQuery"
+      (input)="onSearchChange($event)"
+    />
+  </div>
+
+  <div class="stats-bar">
+    <span class="stat-item">
+      <strong>{{ stats.parentLogs }}</strong> parent logs
+    </span>
+    <span class="stat-item">
+      <strong>{{ stats.childOperations }}</strong> child operations
+    </span>
+    <span class="stat-item">
+      <strong>{{ stats.filtered }}</strong> filtered
+    </span>
+  </div>
+
+  <div class="logs-list">
+    <div *ngFor="let log of filteredLogs" class="log-group">
+      <div 
+        class="log-item"
+        [class.log-item-highlighted]="isHighlighted(log.id)"
+        (click)="openLogModal(log, $event)"
+      >
+        <button 
+          class="log-chevron"
+          [class.log-chevron-expanded]="isExpanded(log.id)"
+          [class.log-chevron-hidden]="!log.children || log.children.length === 0"
+          (click)="toggleExpand(log.id, $event)"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="log-content">
+          <div class="log-endpoint">{{ log.endpoint }}</div>
+          
+          <div class="log-details">
+            <span class="log-detail">
+              <span class="log-label">ID:</span>
+              <span class="log-value">{{ log.id }}</span>
+            </span>
+            
+            <span class="log-detail">
+              <span class="log-label">Time:</span>
+              <span class="log-value">{{ log.timestamp }}</span>
+            </span>
+            
+            <span class="log-detail">
+              <span class="log-label">Method:</span>
+              <span class="method-badge" [ngClass]="getMethodClass(log.method)">
+                {{ log.method }}
+              </span>
+            </span>
+            
+            <span class="log-detail">
+              <span class="log-label">Status:</span>
+              <span class="status-badge" [ngClass]="getStatusClass(log.status)">
+                {{ log.status }}
+              </span>
+            </span>
+            
+            <span class="log-detail">
+              <span class="log-label">Duration:</span>
+              <span class="log-value">{{ log.duration }}ms</span>
+            </span>
+          </div>
+
+          <div *ngIf="log.children && log.children.length > 0" class="child-count">
+            {{ log.children.length }} child operations
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="isExpanded(log.id) && log.children && log.children.length > 0" class="children-container">
+        <div *ngFor="let child of log.children" class="child-log-wrapper">
+          <div 
+            class="log-item log-item-child"
+            [class.log-item-highlighted]="selectedLog?.id === log.id && selectedChild?.id === child.id"
+            (click)="openChildModal(log, child, $event)"
+          >
+            <div class="log-content">
+              <div class="log-endpoint">{{ child.endpoint }}</div>
+              
+              <div class="log-details">
+                <span class="log-detail">
+                  <span class="log-label">ID:</span>
+                  <span class="log-value">{{ child.id }}</span>
+                </span>
+                
+                <span class="log-detail">
+                  <span class="log-label">Time:</span>
+                  <span class="log-value">{{ child.timestamp }}</span>
+                </span>
+                
+                <span class="log-detail">
+                  <span class="log-label">Method:</span>
+                  <span class="method-badge" [ngClass]="getMethodClass(child.method)">
+                    {{ child.method }}
+                  </span>
+                </span>
+                
+                <span class="log-detail">
+                  <span class="log-label">Status:</span>
+                  <span class="status-badge" [ngClass]="getStatusClass(child.status)">
+                    {{ child.status }}
+                  </span>
+                </span>
+                
+                <span class="log-detail">
+                  <span class="log-label">Duration:</span>
+                  <span class="log-value">{{ child.duration }}ms</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-log-modal
+  *ngIf="selectedLog"
+  [log]="selectedChild || selectedLog"
+  [isChild]="!!selectedChild"
+  (close)="closeLogModal()"
+  (openJson)="openJsonModal($event.data, $event.title)"
+></app-log-modal>
+
+<app-json-modal
+  *ngIf="showJsonModal"
+  [data]="jsonModalData"
+  [title]="jsonModalTitle"
+  (close)="closeJsonModal()"
+></app-json-modal>
