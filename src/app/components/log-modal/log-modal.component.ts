@@ -60,82 +60,88 @@ export class LogModalComponent {
   }
 }
 
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { LogEntry, JsonModalData } from '../../models/log.model';
+import { Component, Input, Output, EventEmitter } from "@angular/core"
+import type { LogEntry } from "../../models/log.model"
 
 @Component({
-  selector: 'app-log-modal',
-  templateUrl: './log-modal.component.html',
-  styleUrls: ['./log-modal.component.css']
+  selector: "app-log-modal",
+  templateUrl: "./log-modal.component.html",
+  styleUrls: ["./log-modal.component.css"],
 })
 export class LogModalComponent {
-  @Input() log!: LogEntry;
-  @Input() isOpen: boolean = false;
-  @Output() onClose = new EventEmitter<void>();
-  @Output() onOpenJson = new EventEmitter<JsonModalData>();
+  @Input() log!: LogEntry
+  @Input() isChild = false
+  @Output() close = new EventEmitter<void>()
+  @Output() openJson = new EventEmitter<{ data: any; title: string }>()
 
-  jsonModalData: JsonModalData | null = null;
+  // UI state
+  activeTab: "overview" | "request" | "response" = "overview"
 
-  close() {
-    this.onClose.emit();
+  // store expanded node ids (Set for O(1) checks)
+  expanded = new Set<string | number>()
+
+  onClose(): void {
+    this.close.emit()
   }
 
-  onBackdropClick(event: MouseEvent) {
+  onBackdropClick(event: MouseEvent): void {
     if (event.target === event.currentTarget) {
-      this.close();
+      this.onClose()
     }
   }
 
-  viewRequest(log: LogEntry) {
-    this.onOpenJson.emit({
-      type: 'request',
-      data: log.request,
-      title: `${log.endpoint} - Request`
-    });
+  setActiveTab(tab: "overview" | "request" | "response"): void {
+    this.activeTab = tab
   }
 
-  viewResponse(log: LogEntry) {
-    this.onOpenJson.emit({
-      type: 'response',
-      data: log.response,
-      title: `${log.endpoint} - Response`
-    });
+  viewRequestJson(entry: LogEntry): void {
+    this.openJson.emit({ data: entry.request, title: `${entry.endpoint} - Request Body` })
   }
 
-  getStatusIcon(status: number, endpoint: string): string {
-    // Custom logic based on your requirements
-    if (status === 200) return '✓';
-    if (endpoint.includes('db')) return '●';
-    return '➢';
-  }
-
-  getStatusIconClass(status: number, endpoint: string): string {
-    if (status === 200) return 'status-success';
-    if (endpoint.includes('db')) return 'status-pending';
-    return 'status-running';
+  viewResponseJson(entry: LogEntry): void {
+    this.openJson.emit({ data: entry.response, title: `${entry.endpoint} - Response Body` })
   }
 
   getMethodClass(method: string): string {
     const methodMap: Record<string, string> = {
-      GET: 'method-get',
-      POST: 'method-post',
-      PUT: 'method-put',
-      DELETE: 'method-delete',
-      PATCH: 'method-patch'
-    };
-    return methodMap[method] || 'method-get';
+      GET: "method-get",
+      POST: "method-post",
+      PUT: "method-put",
+      DELETE: "method-delete",
+      PATCH: "method-patch",
+    }
+    return methodMap[method] || "method-get"
   }
 
+  getStatusClass(status: number): string {
+    if (status >= 200 && status < 300) return "status-success"
+    if (status >= 300 && status < 400) return "status-redirect"
+    if (status >= 400 && status < 500) return "status-client-error"
+    if (status >= 500) return "status-server-error"
+    return "status-info"
+  }
+
+  getObjectKeys(obj: any): string[] {
+    return obj ? Object.keys(obj) : []
+  }
+
+  // expansion helpers
+  isExpanded(id: string | number | undefined): boolean {
+    if (id === undefined || id === null) return false
+    return this.expanded.has(id)
+  }
+
+  toggleExpanded(id: string | number | undefined, event?: MouseEvent): void {
+    if (event) event.stopPropagation()
+    if (id === undefined || id === null) return
+    if (this.expanded.has(id)) this.expanded.delete(id)
+    else this.expanded.add(id)
+  }
+
+  // count all nested children (for top-level summary)
   countAllChildren(entry: LogEntry): number {
-    if (!entry.children || entry.children.length === 0) return 0;
-    return entry.children.reduce((acc, child) => acc + 1 + this.countAllChildren(child), 0);
-  }
-
-  get totalChildren(): number {
-    return this.countAllChildren(this.log);
-  }
-
-  toggleChildExpansion(child: LogEntry) {
-    child.expanded = !child.expanded;
+    if (!entry.children || entry.children.length === 0) return 0
+    return entry.children.reduce((acc, c) => acc + 1 + this.countAllChildren(c), 0)
   }
 }
+
