@@ -17,3 +17,9 @@ export interface LogStats {
   childOperations: number
   filtered: number
 }
+
+export interface JsonModalData {
+  type: 'request' | 'response';
+  data: any;
+  title: string;
+}
