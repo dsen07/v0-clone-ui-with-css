@@ -150,3 +150,38 @@
   [title]="jsonModalTitle"
   (close)="closeJsonModal()"
 ></app-json-modal>
+
+
+
+
+<main class="main-container">
+  <div class="content-wrapper">
+    <h1 class="title">Nested Modal Example</h1>
+    <p class="description">
+      Click the button to open the first modal with a list. Click any list item to open a second modal with detailed data.
+    </p>
+    <button class="primary-button" (click)="openListModal()">
+      Open List Modal
+    </button>
+  </div>
+
+  <!-- First Modal: List of API endpoints -->
+  <app-list-modal 
+    [open]="isListModalOpen"
+    [data]="listData"
+    [loading]="loadingList"
+    [error]="listError"
+    (onClose)="closeListModal()"
+    (onItemClick)="onListItemClick($event)">
+  </app-list-modal>
+
+  <!-- Second Modal: Detail data from selected endpoint -->
+  <app-detail-modal
+    [open]="isDetailModalOpen"
+    [data]="detailData"
+    [loading]="loadingDetail"
+    [error]="detailError"
+    (onClose)="closeDetailModal()">
+  </app-detail-modal>
+</main>
+
