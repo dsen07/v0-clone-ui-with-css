@@ -1,4 +1,54 @@
 import { Injectable } from "@angular/core"
+import { type HttpClient, HttpParams } from "@angular/common/http"
+import { type Observable, delay } from "rxjs"
+
+export interface User {
+  id: number
+  name: string
+  email: string
+  phone: string
+}
+
+@Injectable({
+  providedIn: "root",
+})
+export class DataService {
+  private apiUrl = "https://jsonplaceholder.typicode.com/users"
+
+  constructor(private http: HttpClient) {}
+
+  /**
+   * Generic GET method to fetch data from any REST API endpoint
+   * @param endpoint - The API endpoint URL
+   * @param params - Optional query parameters as an object
+   * @param addDelay - Optional delay in milliseconds for simulating loading
+   * @returns Observable of the response data
+   */
+  get<T>(endpoint: string, params?: { [key: string]: string | number | boolean }, addDelay?: number): Observable<T> {
+    let httpParams = new HttpParams()
+
+    // Build query parameters if provided
+    if (params) {
+      Object.keys(params).forEach((key) => {
+        httpParams = httpParams.set(key, String(params[key]))
+      })
+    }
+
+    const request = this.http.get<T>(endpoint, { params: httpParams })
+
+    // Add optional delay for loading simulation
+    return addDelay ? request.pipe(delay(addDelay)) : request
+  }
+
+  // Specific method using the generic GET method
+  getUsers(): Observable<User[]> {
+    return this.get<User[]>(this.apiUrl, undefined, 1000)
+  }
+}
+
+
+
+import { Injectable } from "@angular/core"
 import { BehaviorSubject, type Observable } from "rxjs"
 import type { LogEntry, LogStats } from "../models/log.model"
 
