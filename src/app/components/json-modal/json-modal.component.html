@@ -23,3 +23,56 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+
+
+<div class="modal-backdrop" *ngIf="open" (click)="onBackdropClick($event)">
+  <div class="modal-container">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title">User Data</h2>
+        <p class="modal-description">Loading user information from REST API</p>
+      </div>
+      <button class="close-button" (click)="closeModal()" aria-label="Close modal">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Modal Content -->
+    <div class="modal-content">
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-container">
+        <div class="spinner"></div>
+        <p class="loading-text">Loading data...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="error && !loading" class="error-container">
+        <p class="error-title">Error:</p>
+        <p class="error-message">{{ error }}</p>
+      </div>
+
+      <!-- Data Loaded State -->
+      <div *ngIf="!loading && !error && data.length > 0" class="data-container">
+        <div *ngFor="let user of data" class="user-card">
+          <h3 class="user-name">{{ user.name }}</h3>
+          <p class="user-detail">{{ user.email }}</p>
+          <p class="user-detail">{{ user.phone }}</p>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!loading && !error && data.length === 0" class="empty-container">
+        No data available
+      </div>
+    </div>
+  </div>
+</div>
+
